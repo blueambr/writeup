@@ -20,7 +20,7 @@ export default config({
   storage: {
     // kind: "local",
     kind: "github",
-    repo: "blueambr/openblog",
+    repo: "blueambr/writeup",
   },
   ui: {
     brand: { name: configs.website.title },
