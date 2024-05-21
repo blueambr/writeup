@@ -1,0 +1,76 @@
+---
+import "photoswipe/style.css";
+import "photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.css";
+
+const { images } = Astro.props;
+---
+
+<div class="pswp-gallery pswp-gallery--single-column grid grid-cols-3 gap-4">
+  {
+    images.map(
+      ({
+        src,
+        alt,
+        width,
+        height,
+        figcaption,
+      }: {
+        src: string;
+        alt?: string;
+        width: number;
+        height: number;
+        figcaption?: string;
+      }) => (
+        <a
+          href={src}
+          data-pswp-width={width}
+          data-pswp-height={height}
+          data-cropped="true"
+          target="_blank"
+        >
+          <figure class="!m-0">
+            <img
+              class="aspect-square w-full object-cover"
+              src={src}
+              alt={alt || ""}
+            />
+            {figcaption && (
+              <figcaption class="pswp-caption-content">{figcaption}</figcaption>
+            )}
+          </figure>
+        </a>
+      ),
+    )
+  }
+</div>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import PhotoSwipeDynamicCaption from "photoswipe-dynamic-caption-plugin";
+  import { t } from "@/utils";
+
+  const initLightbox = () => {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: document.querySelectorAll(".pswp-gallery"),
+      children: "a",
+      pswpModule: () => import("photoswipe"),
+      closeTitle: t("ui-website", "gallery.close"),
+      zoomTitle: t("ui-website", "gallery.zoom"),
+      arrowPrevTitle: t("ui-website", "gallery.previous"),
+      arrowNextTitle: t("ui-website", "gallery.next"),
+      errorMsg: t("ui-website", "gallery.loading-error"),
+    });
+
+    new PhotoSwipeDynamicCaption(lightbox);
+
+    lightbox.init();
+  };
+
+  initLightbox();
+
+  document.addEventListener("astro:after-swap", () => {
+    if (document.querySelector(".pswp-gallery")) {
+      initLightbox();
+    }
+  });
+</script>

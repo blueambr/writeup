@@ -1,0 +1,68 @@
+---
+type TableOfContents = {
+  slug: string;
+  depth: number;
+  text: string;
+  subheadings: TableOfContents[];
+};
+
+const { headings } = Astro.props;
+
+const initToc = (headings: TableOfContents[]) => {
+  let result: TableOfContents[] = [];
+  let parentHeadings = new Map();
+
+  headings.forEach((h) => {
+    let heading = { ...h, subheadings: [] };
+
+    parentHeadings.set(heading.depth, heading);
+
+    if (heading.depth === 2) {
+      result.push(heading);
+    }
+
+    if (heading.depth === 3) {
+      parentHeadings.get(2).subheadings.push(heading);
+    }
+  });
+
+  return result;
+};
+
+const toc = initToc(headings);
+
+const headingStyles =
+  "block py-1.5 decoration-2 underline-offset-4 hover:underline focus:underline";
+---
+
+<nav>
+  <h1 class="mb-4 text-2xl font-bold">Index</h1>
+  <ul class="max-h-[70vh] overflow-auto">
+    {
+      toc.map((heading) => (
+        <li>
+          <a
+            class={headingStyles}
+            href={`#${heading.slug}`}
+            x-on:click="isTocVisibleInMobile = false"
+          >
+            {heading.text}
+          </a>
+          {heading.subheadings.length > 0 && (
+            <ul class="border-l border-slate-950/10 pl-3 dark:border-slate-50/10">
+              {heading.subheadings.map((subheading: typeof heading) => (
+                <a
+                  class={headingStyles}
+                  href={`#${subheading.slug}`}
+                  x-on:click="isTocVisibleInMobile = false"
+                >
+                  {subheading.text}
+                </a>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</nav>

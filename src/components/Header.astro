@@ -1,0 +1,55 @@
+---
+import Details from "@/components/Details.astro";
+import Icon from "@/components/Icon.astro";
+import Search from "@/components/Search.astro";
+import { getCategories, getTags } from "@/lib/content";
+import { t } from "@/utils";
+import ThemeToggle from "./ThemeToggle.astro";
+
+const categories = await getCategories();
+const tags = await getTags();
+---
+
+<header
+  class="flex items-center justify-between gap-6 pt-6 lg:pt-8"
+  transition:persist
+>
+  <nav class="flex items-center gap-6">
+    <a
+      class="ghost-icon block hover:text-pink-500 focus:text-pink-500"
+      href="/"
+      title={t("ui-website", "label.header.home")}
+      aria-label={t("ui-website", "label.header.home")}
+    >
+      <Icon name="home" />
+    </a>
+    {
+      (!!categories.length || (tags && !!tags.length)) && (
+        <ul class="flex items-center gap-6">
+          {!!categories.length && (
+            <li>
+              <Details
+                summary={t("ui-website", "label.header.categories")}
+                icon="category"
+                list={categories}
+              />
+            </li>
+          )}
+          {tags && !!tags.length && (
+            <li>
+              <Details
+                summary={t("ui-website", "label.header.tags")}
+                icon="tags"
+                list={tags}
+              />
+            </li>
+          )}
+        </ul>
+      )
+    }
+  </nav>
+  <div class="flex items-center gap-6">
+    <Search />
+    <ThemeToggle />
+  </div>
+</header>

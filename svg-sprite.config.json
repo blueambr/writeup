@@ -1,0 +1,25 @@
+{
+  "dest": "./public/",
+  "log": "verbose",
+  "shape": {
+    "id": {
+      "separator": ""
+    },
+    "transform": []
+  },
+  "transform": [],
+  "svg": {
+    "xmlDeclaration": false,
+    "doctypeDeclaration": false,
+    "namespaceIDs": false,
+    "dimensionAttributes": false
+  },
+  "mode": {
+    "symbol": {
+      "dest": "./",
+      "prefix": "",
+      "dimensions": "",
+      "sprite": "./sprite.svg"
+    }
+  }
+}

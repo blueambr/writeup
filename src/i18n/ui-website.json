@@ -1,0 +1,22 @@
+{
+  "page-title.all-posts": "All Posts",
+  "page-title.before-page-number": ", page",
+  "title.if-no-posts": "No posts found",
+  "title.related-articles": "Related Articles",
+  "text.after-reading-time-number": "min read",
+  "text.show-more": "Show more",
+  "label.header.home": "Go to the Home page",
+  "label.header.categories": "Show Categories",
+  "label.header.tags": "Show Tags",
+  "label.header.search": "Show Search",
+  "label.header.theme": "Light / Dark theme",
+  "label.pagination.first-page": "Go to the first page",
+  "label.pagination.go-to-page": "Go to the page",
+  "label.pagination.last-page": "Go to the last page",
+  "label.toc": "Show / Hide Table of contents",
+  "gallery.close": "Close",
+  "gallery.zoom": "Zoom",
+  "gallery.previous": "Previous",
+  "gallery.next": "Next",
+  "gallery.loading-error": "The image cannot be loaded"
+}

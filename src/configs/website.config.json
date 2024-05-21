@@ -1,0 +1,26 @@
+{
+  "lang": "en",
+  "title": "WriteUp",
+  "description": "WriteUp your own blog 🖊️",
+  "author": "Blue Amber",
+  "favicon": "/favicon.svg",
+  "ogImage": "/ogImage.png",
+  "webmanifest": {
+    "themeColor": "#8b5cf6",
+    "bgColor": "#020617",
+    "appleTouchIcon": "/webmanifest/appleTouchIcon.png",
+    "androidTouchIcon": "/webmanifest/androidTouchIcon.png",
+    "androidSplashIcon": "/webmanifest/androidSplashIcon.png"
+  },
+  "comments": {
+    "label": "Comments",
+    "icon": "telegram"
+  },
+  "socials": [
+    {
+      "label": "Telegram",
+      "icon": "telegram",
+      "link": "https://t.me/blueamber"
+    }
+  ]
+}

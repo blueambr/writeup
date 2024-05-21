@@ -1,0 +1,53 @@
+---
+import Icon from "@/components/Icon.astro";
+import { t } from "@/utils";
+const { page } = Astro.props;
+const { currentPage, lastPage, url } = page;
+const buttonStyles =
+  "button-state flex h-8 w-8 cursor-pointer items-center justify-center";
+---
+
+<nav class="flex items-center justify-center gap-1" role="navigation">
+  <a
+    class={buttonStyles}
+    href={url.current.replace(/.$/, 1)}
+    aria-label={t("ui-website", "label.pagination.first-page")}
+  >
+    <Icon name="chevron-left-pipe" size="xs" />
+  </a>
+  {
+    currentPage !== 1 && (
+      <a
+        class={buttonStyles}
+        href={url.prev}
+        aria-label={`${t("ui-website", "label.pagination.go-to-page")} ${currentPage - 1}`}
+      >
+        {currentPage - 1}
+      </a>
+    )
+  }
+  <div
+    class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-950 dark:border-slate-50"
+    aria-current="true"
+  >
+    {currentPage}
+  </div>
+  {
+    currentPage !== lastPage && (
+      <a
+        class={buttonStyles}
+        href={url.next}
+        aria-label={`${t("ui-website", "label.pagination.go-to-page")} ${currentPage + 1}`}
+      >
+        {currentPage + 1}
+      </a>
+    )
+  }
+  <a
+    class={buttonStyles}
+    href={url.current.replace(/.$/, lastPage)}
+    aria-label={t("ui-website", "label.pagination.last-page")}
+  >
+    <Icon name="chevron-right-pipe" size="xs" />
+  </a>
+</nav>

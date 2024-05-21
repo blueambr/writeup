@@ -1,0 +1,44 @@
+---
+import Icon from "@/components/Icon.astro";
+import { configs } from "@/configs";
+
+const today = new Date();
+---
+
+<footer
+  class="mt-auto flex flex-col items-center justify-center pb-6 lg:px-16 lg:pb-8"
+  transition:persist
+>
+  <div
+    class="mb-6 h-0.5 w-full bg-gradient-to-r from-violet-500 to-pink-500 lg:mb-8"
+  >
+  </div>
+  <div>
+    {
+      !!configs.website.socials.length && (
+        <ul class="mb-2 flex flex-wrap items-center justify-center gap-2">
+          {configs.website.socials.map(
+            (social: { label: string; icon: string; link: string }) => (
+              <li>
+                <a
+                  class="shadow-default button-state flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-violet-500 text-slate-50"
+                  href={social.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={social.label}
+                  aria-label={social.label}
+                >
+                  <Icon name={social.icon} />
+                </a>
+              </li>
+            ),
+          )}
+        </ul>
+      )
+    }
+    <div class="text-lg">
+      &copy; {today.getFullYear()}
+      {configs.website.author}
+    </div>
+  </div>
+</footer>

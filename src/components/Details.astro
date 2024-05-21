@@ -1,0 +1,62 @@
+---
+import Icon from "@/components/Icon.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  summary: string;
+  icon: string;
+  list: CollectionEntry<"categories">[] | CollectionEntry<"tags">[];
+}
+
+const { summary, icon, list } = Astro.props;
+---
+
+<astro-details>
+  <details class="relative">
+    <summary
+      class="ghost-icon w-fit cursor-pointer list-none hover:text-pink-500 focus:text-pink-500"
+      title={summary}
+      aria-label={summary}
+    >
+      <Icon name={icon} />
+    </summary>
+    <div
+      class="shadow-default absolute left-0 top-full z-10 mt-4 w-52 overflow-hidden rounded-lg bg-slate-50/95 dark:bg-slate-950/95"
+    >
+      <ul
+        class="max-h-52 overflow-auto [scrollbar-color:currentColor_transparent]"
+      >
+        {
+          list.map((item) => (
+            <li>
+              <a
+                class="button-state block rounded-none px-4 py-2"
+                href={`/${item.id}/page-1`}
+              >
+                {item.data.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </details>
+</astro-details>
+
+<script>
+  class AstroDetails extends HTMLElement {
+    constructor() {
+      super();
+
+      const details = this.querySelector("details");
+
+      document.addEventListener("click", (e) => {
+        if (details && e.target !== details && details.open) {
+          details.open = false;
+        }
+      });
+    }
+  }
+
+  customElements.define("astro-details", AstroDetails);
+</script>

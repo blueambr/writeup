@@ -1,0 +1,39 @@
+---
+import Pagination from "@/components/Pagination.astro";
+import Posts from "@/components/Posts.astro";
+import { configs } from "@/configs";
+import Common from "@/layouts/Common.astro";
+import { getPosts, getTags } from "@/lib/content";
+import { t } from "@/utils";
+
+const { page, tag } = Astro.props;
+const posts = page.data;
+
+export async function getStaticPaths({ paginate }: any) {
+  const tags = await getTags();
+  const allPosts = await getPosts();
+
+  return tags.flatMap((tag) => {
+    const filteredPosts = allPosts.filter(
+      (post) =>
+        post.data.tags && post.data.tags.some((postTag) => postTag === tag.id),
+    );
+
+    return paginate(filteredPosts, {
+      params: { tag: tag.id },
+      props: { tag },
+      pageSize: configs.postsGrid.postsPerPage,
+    });
+  });
+}
+---
+
+<Common
+  title={`${tag.data.title}${t("ui-website", "page-title.before-page-number")} ${page.currentPage}`}
+>
+  <h1 class="title">
+    {tag.data.title}
+  </h1>
+  <Posts {posts} />
+  {posts.length + 1 > configs.postsGrid.postsPerPage && <Pagination {page} />}
+</Common>

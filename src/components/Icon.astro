@@ -1,0 +1,14 @@
+---
+import { clsx } from "clsx";
+const { name, size = "sm", class: className } = Astro.props;
+---
+
+<svg
+  class={clsx(
+    size === "xs" && "h-5 w-5",
+    size === "sm" && "h-6 w-6 ",
+    className,
+  )}
+>
+  <use href=`/sprite.svg#${name}`></use>
+</svg>

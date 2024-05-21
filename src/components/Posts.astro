@@ -1,0 +1,64 @@
+---
+import { configs } from "@/configs";
+import { getReadingTime, t } from "@/utils";
+import type { CollectionEntry } from "astro:content";
+import { clsx } from "clsx";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length ? (
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map(async (post) => {
+        const {
+          body,
+          data: { title, description, pubDate, coverImage, category },
+          slug,
+        } = post;
+        const articlePubDate = pubDate.toISOString();
+        const formattedDate = pubDate.toLocaleDateString(configs.website.lang, {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+
+        return (
+          <article>
+            <a class="block" href={`/${category}/${slug}/`}>
+              <img
+                class={clsx(
+                  "shadow-default mb-4 rounded-lg object-cover",
+                  configs.postsGrid.coverImage.aspect,
+                )}
+                src={coverImage}
+                alt=""
+                width={configs.postsGrid.coverImage.width}
+                height={configs.postsGrid.coverImage.height}
+              />
+              <div class="flex flex-col gap-1">
+                <div class="flex justify-between gap-2 text-sm">
+                  <time datetime={articlePubDate}>{formattedDate}</time>
+                  <span class="text-sm">
+                    {getReadingTime(body)}
+                    {t("ui-website", "text.after-reading-time-number")}
+                  </span>
+                </div>
+                <div class="text-2xl font-bold">{title}</div>
+                <p>{description}</p>
+              </div>
+            </a>
+          </article>
+        );
+      })}
+    </div>
+  ) : (
+    <div class="text-center text-2xl font-bold">
+      {t("ui-website", "title.if-no-posts")}
+    </div>
+  )
+}

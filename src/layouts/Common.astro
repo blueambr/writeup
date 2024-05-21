@@ -1,0 +1,45 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { configs } from "@/configs";
+import Backgrounds from "./partials/Backgrounds.astro";
+import Head from "./partials/Head.astro";
+
+const {
+  title,
+  description,
+  coverImage,
+  articleCategory,
+  articleTags,
+  articlePubDate,
+  articleAuthor,
+} = Astro.props;
+---
+
+<html lang={configs.website.lang} class="scroll-smooth antialiased">
+  <head>
+    <Head
+      {title}
+      {description}
+      ogImage={coverImage}
+      {articleCategory}
+      {articleTags}
+      {articlePubDate}
+      {articleAuthor}
+    />
+  </head>
+  <body
+    class="relative min-h-screen overflow-x-hidden bg-slate-50 font-body text-slate-950 dark:bg-slate-950 dark:text-slate-50"
+  >
+    <Backgrounds />
+    <div
+      class="container flex min-h-screen flex-col gap-8 px-4 lg:gap-12 lg:px-8"
+    >
+      <Header />
+      <main class="grid gap-8 lg:gap-12">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

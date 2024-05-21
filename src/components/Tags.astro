@@ -1,0 +1,25 @@
+---
+import { getTags } from "@/lib/content";
+
+const { values } = Astro.props;
+const tags = await getTags();
+const filteredTags =
+  tags && tags.length ? tags.filter((tag) => values.includes(tag.id)) : null;
+---
+
+{
+  filteredTags && (
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      {filteredTags.map(({ id, data }) => {
+        return (
+          <a
+            class="shadow-default button-state block bg-gradient-to-r from-pink-500 to-violet-500 px-4 py-2 font-bold text-slate-50"
+            href={`/${id}/page-1`}
+          >
+            {data.title}
+          </a>
+        );
+      })}
+    </div>
+  )
+}

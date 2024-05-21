@@ -1,0 +1,54 @@
+---
+import Icon from "@/components/Icon.astro";
+import Pagefind from "astro-pagefind/components/Search";
+import { t } from "@/utils";
+---
+
+<div class="flex">
+  <button
+    id="searchDialogTrigger"
+    class="ghost-icon hover:text-pink-500 focus:text-pink-500"
+    title={t("ui-website", "label.header.search")}
+    aria-label={t("ui-website", "label.header.search")}
+  >
+    <Icon name="search" />
+  </button>
+  <dialog id="searchDialog" class="dialog">
+    <div class="dialog-bg"></div>
+    <Pagefind uiOptions={{ showImages: false }} />
+  </dialog>
+</div>
+
+<script>
+  import { useDialog } from "@/utils";
+
+  const dialog = useDialog("searchDialog", "searchDialogTrigger");
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "/" && !dialog.open) {
+      e.preventDefault();
+      dialog.showModal();
+    }
+  });
+</script>
+
+<style is:global>
+  html {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-font: "Manrope", sans-serif;
+
+    --pagefind-ui-primary: #020617;
+    --pagefind-ui-text: #020617;
+    --pagefind-ui-tag: #020617;
+    --pagefind-ui-background: #f8fafc;
+    --pagefind-ui-border: #02061715;
+  }
+
+  html.dark {
+    --pagefind-ui-primary: #f8fafc;
+    --pagefind-ui-text: #f8fafc;
+    --pagefind-ui-tag: #f8fafc;
+    --pagefind-ui-background: #020617;
+    --pagefind-ui-border: #f8fafc15;
+  }
+</style>

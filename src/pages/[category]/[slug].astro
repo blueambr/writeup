@@ -1,0 +1,136 @@
+---
+import Icon from "@/components/Icon.astro";
+import Posts from "@/components/Posts.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import Tags from "@/components/Tags.astro";
+import { configs } from "@/configs";
+import Common from "@/layouts/Common.astro";
+import { getPosts, getRelatedPosts } from "@/lib/content";
+import { getReadingTime, t } from "@/utils";
+import { clsx } from "clsx";
+
+const post = Astro.props;
+const {
+  body,
+  data: { title, description, coverImage, pubDate, category, tags, comments },
+  slug,
+} = post;
+const articlePubDate = pubDate.toISOString();
+const formattedDate = pubDate.toLocaleDateString(configs.website.lang, {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+const relatedPosts =
+  !!configs.postPage.relatedPosts && tags && tags.length
+    ? await getRelatedPosts(slug, tags, configs.postPage.relatedPosts)
+    : null;
+const { Content, headings } = await post.render();
+
+export const getStaticPaths = async () => {
+  const posts = await getPosts();
+
+  return posts.map((post) => ({
+    params: { category: post.data.category, slug: post.slug },
+    props: post,
+  }));
+};
+---
+
+<Common
+  {title}
+  {description}
+  coverImage={coverImage}
+  articleCategory={category}
+  articleTags={tags}
+  {articlePubDate}
+>
+  <article data-pagefind-body>
+    <div class="mb-12">
+      <div class="mb-12 flex flex-col items-center text-center">
+        <div class="mb-6">
+          <p class="font-bold">
+            <time datetime={articlePubDate}>
+              {formattedDate}
+            </time>
+          </p>
+          <p class="text-sm">
+            {getReadingTime(body)}
+            {t("ui-website", "text.after-reading-time-number")}
+          </p>
+        </div>
+        <h1 class="text-4xl font-bold lg:text-6xl">
+          {title}
+        </h1>
+        {tags && !!tags.length && <Tags values={tags} />}
+      </div>
+      <img
+        class={clsx(
+          "mx-auto rounded-lg object-cover shadow-default",
+          configs.postPage.coverImage.aspect,
+        )}
+        src={coverImage}
+        alt=""
+        width={configs.postPage.coverImage.width}
+        height={configs.postPage.coverImage.height}
+        loading="eager"
+      />
+    </div>
+    <div class="relative flex" x-data="{ isTocVisibleInMobile: false }">
+      <aside
+        class="absolute left-0 top-0 h-full w-full rounded-lg bg-slate-50/95 p-2 transition-transform dark:bg-slate-950/95 lg:static lg:w-1/6 lg:transform-none lg:rounded-none lg:bg-transparent lg:p-0 lg:dark:bg-transparent"
+        x-bind:class="!isTocVisibleInMobile && '-translate-x-[calc(100%+1rem)]'"
+      >
+        <div class="sticky top-6 lg:top-8">
+          {headings?.length > 0 && <TableOfContents {headings} />}
+        </div>
+      </aside>
+      <div class="w-full lg:w-4/6 lg:px-8">
+        <div
+          class="prose prose-lg prose-slate max-w-none dark:prose-invert lg:prose-xl prose-img:rounded-lg"
+        >
+          <Content />
+        </div>
+      </div>
+      {
+        headings?.length > 0 && (
+          <div class="absolute right-0 top-0 h-full p-2">
+            <button
+              class="ghost-icon !sticky top-6 hover:text-pink-500 focus:text-pink-500 lg:hidden"
+              title={t("ui-website", "label.toc")}
+              aria-label={t("ui-website", "label.toc")}
+              x-on:click="isTocVisibleInMobile = !isTocVisibleInMobile"
+            >
+              <Icon name="list-letters" />
+            </button>
+          </div>
+        )
+      }
+    </div>
+    {
+      comments && (
+        <div class="mt-12 flex justify-center lg:mx-auto lg:w-4/6 lg:pl-8">
+          <a
+            class="shadow-default button-state flex min-w-[40%] items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-pink-500 to-violet-500 px-8 py-4 font-bold text-slate-50 lg:-ml-8"
+            href={comments}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {configs.website.comments.icon && <Icon name="telegram" />}
+            <span>{configs.website.comments.label}</span>
+          </a>
+        </div>
+      )
+    }
+    {
+      relatedPosts && (
+        <div class="mt-12 lg:mx-auto lg:w-4/6 lg:pl-8">
+          <h2 class="mb-6 text-lg font-bold">
+            {t("ui-website", "title.related-articles")}
+          </h2>
+          <Posts posts={relatedPosts} />
+        </div>
+      )
+    }
+  </article>
+</Common>
