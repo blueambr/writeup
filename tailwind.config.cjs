@@ -2,6 +2,15 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 
+/**
+ * Colors used:
+ * slate-50
+ * slate-950
+ * pink-500
+ * violet-500
+ * violet-900
+ */
+
 module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{astro,html,js,jsx,ts,tsx,md,mdoc,mdx,yaml,json}"],
